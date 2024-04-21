@@ -37,8 +37,27 @@ async def main(day_index):
         print(err)
         return None
     
+def extract_rates_for_dates(data_list):
+    result = []
+    for data in data_list:
+        date = data['date']
+        rates = {}
+        for rate in data['exchangeRate']:
+            if rate['currency'] in ['EUR', 'USD']:
+                rates[rate['currency']] = {
+                    'sale': rate['saleRate'],
+                    'purchase': rate['purchaseRate']
+                }
+       
+        result.append({date: rates})
+    return result
+
+
 if __name__ == "__main__":
     res = asyncio.run(main(sys.argv[1]))
-    pprint.pp(res)
+    result = extract_rates_for_dates(res)
+    pprint.pprint(result)
+    
+
     
     
